@@ -4,7 +4,6 @@
  * Vertical Views. An extension for the phpBB Forum Software package.
  *
  * @copyright (c) 2023, axew3, http://axew3.com
- * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
