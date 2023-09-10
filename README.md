@@ -3,9 +3,6 @@
 
 Under construction!
 
-[Donate](https://www.paypal.com/paypalme/alessionanni/ "Help axew3!")
-
-
 Test release: tested on phpBB prosilver 3.3
 
 # Note: This is not an option.
@@ -17,6 +14,9 @@ See this post for install instructions (that soon will change) if you need it
 [Ask on topic at phpBB.com](https://www.phpbb.com/community/viewtopic.php?p=15973420#p15973420 "phpBB.com help topic")
 
 I maybe also expect that you'll help on improve this for all, while also for your personal use.
+
+Please consider to help me:
+[Donate](https://www.paypal.com/paypalme/alessionanni/ "Help axew3!")
 
 
 Remember: the author site, axew3.com, or this github repo,
