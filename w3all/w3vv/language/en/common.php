@@ -33,9 +33,3 @@ if (empty($lang) || !is_array($lang))
 // Some characters you may want to copy&paste:
 // ’ » “ ” …
 //
-
-$lang = array_merge($lang, [
-
-	'W3VV_EVENT'		=> ' :: W3vv Event :: ',
-
-]);
