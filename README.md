@@ -14,8 +14,9 @@ The author site, or the github repo. Into your main features template explain.
 [Ask on topic at phpBB.com](https://www.phpbb.com/community/viewtopic.php?p=15973420#p15973420 "phpBB.com help topic")
 
 I maybe also expect that you'll help on improve this for all, while also for your personal use.
-You have to mention 
-The author site, axew3.com, or this github repo.
+
+
+You have to mention: The author site, axew3.com, or this github repo,
 into your main template features explain, if you'll use this idea.
 
 
