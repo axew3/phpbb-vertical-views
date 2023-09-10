@@ -9,11 +9,9 @@ Test release: tested on phpBB prosilver 3.3
 ## You have to mention that you used this idea if you'll use it.
 ## Into your main features template explain.
 The author site, or the github repo. Into your main features template explain.
+[Ask on topic at phpBB.com](https://www.phpbb.com/community/viewtopic.php?p=15973420#p15973420 "phpBB.com help topic")
 
-See devel logs and notes into 
-[phpBB.com topic]([https://www.axew3.com/w3/forums/viewtopic.php?f=20&t=1639](https://www.phpbb.com/community/viewtopic.php?p=15973420#p15973420) "phpbb vv")
-
-I also expect that you'll help on improve this for all, while also for your personal use.
+I maybe also expect that you'll help on improve this for all, while also for your personal use.
 The author site, axew3.com, or this github repo.
 I also expect that you'll help on improve this.
 
