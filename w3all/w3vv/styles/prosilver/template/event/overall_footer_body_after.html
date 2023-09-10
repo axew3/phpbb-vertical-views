@@ -56,9 +56,6 @@
     }
 // END Add classes w3vvPP+numpage
 
-
-    let w3vv_ticking = false;
-
   // To record the list of retrieved pages: will be intialized with the first page, the one where we land on, on key 1
     var w3vv_loadedPages_Ary = {};
     var w3vv_Pages_Aryxfl = {}; // used to fill lacking array keys when there are two ellipsis
@@ -270,6 +267,7 @@ function w3vv_getPosts_pushT(prepApp, pageUrl, postID)
   // The Listener vars
 
 
+      var w3vv_ticking = false;
       var pageprev = parseInt(w3vv_startPage) - 1;
       var pagenext = parseInt(w3vv_startPage);
       var oneiter = 0;
