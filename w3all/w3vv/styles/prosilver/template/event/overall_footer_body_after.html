@@ -1,0 +1,382 @@
+<!-- IF not W3VV_VIEWTOPIC_MODE  -->
+<script>
+  // copyright axew3.com
+  // w3_vv phpBB
+  // vertical views for phpBB viewtopic
+
+  // !! NEED to MATCH on DOM (tested on default prosilver theme phpBB 3.3)
+  // should work/match on any theme that respect the phpBB elements order on Dom
+  // (almost for the used selectors)
+  // If you cannot get out on make it work into your theme or
+  // If you want an advanced or modified version
+  // contact me at axew3.com
+
+   var w3vvOnViewTopic = "{W3VV_ONVIEWTOPIC}";
+   //var w3vvOnViewForum = "{W3VV_ONVIEWFORUM}";
+
+  // !! NEED to MATCH on DOM (pagination on prosilver theme)
+  if ( w3vvOnViewTopic == 1 && document.querySelector(".bar-top > .pagination > ul > li.active > span") != null )
+  {
+
+    // !! NEED to MATCH on DOM
+    // actual landed first page, in the pagination buttons
+     var w3vv_actP = document.querySelector(".bar-top > .pagination > ul > li > span");
+    // !! NEED to MATCH on DOM *
+     var w3vv_startPage = w3vv_actP.innerHTML; // extracted text page num, where we are landing on
+    // all pages, on the 'pagination' buttons
+    // !! NEED to MATCH on DOM
+     var w3vv_allPages = document.querySelectorAll(".bar-top > .pagination > ul > li");
+
+    // When the pagination menu change due to many pages, the first span contain ... (NaN)
+    // Get the second then (in the hope) that should be the good one
+     if(isNaN(w3vv_startPage)){
+    // !! NEED to MATCH on DOM
+     let w3vv_actPP = document.querySelectorAll(".bar-top > .pagination > ul > li > span");
+      w3vv_startPage = w3vv_actPP[1].innerHTML;
+     }
+
+// Add classes w3vvPP+numpage to each pagination li element: elements with whitespaces (non numbers) are naturally reduced to NaN string
+// TOP
+  var w3vv_allPaginationTOP = document.querySelectorAll(".bar-top > .pagination > ul > li");
+    let t;
+    for (let el of w3vv_allPaginationTOP) {
+      t='w3vvPP'+parseInt(el.outerText.trim());
+      if(el.className != 'ellipsis'){
+       el.classList.add(t);
+      }
+    }
+// BOTTOM
+  var w3vv_allPaginationBOTTOM = document.querySelectorAll(".bar-bottom > .pagination > ul > li");
+    let b;
+    for (let el of w3vv_allPaginationBOTTOM) {
+      b='w3vvPP'+parseInt(el.outerText.trim());
+      if(el.className != 'ellipsis'){
+       el.classList.add(b);
+      }
+    }
+// END Add classes w3vvPP+numpage
+
+
+    let w3vv_ticking = false;
+
+  // To record the list of retrieved pages: will be intialized with the first page, the one where we land on, on key 1
+    var w3vv_loadedPages_Ary = {};
+    var w3vv_Pages_Aryxfl = {}; // used to fill lacking array keys when there are two ellipsis
+    //var w3vv_pidPagePairs = {}; // used to collect postID/Page pairs, so to know when to switch the navigation page button into Active or normal state
+
+  // Build an array of pages from the pagination buttons:
+  // Will exclude dropdown-container (jump to page) button, previous and next arrows/buttons
+  // key = page num // value = url
+    var w3vv_pagesUrlAry = [];
+
+    // ! Initialize the first array element with a fake value on key 0. It is needed to maintain pagesNum as keys, in order.
+    w3vv_pagesUrlAry[0] = 'w3';
+    w3vv_loadedPages_Ary[0] = 'w3'; // collect loaded pages on scroll
+
+    // This to know missing keys numbers so to push missing keys to the array w3vv_pagesUrlAry
+    // Fill the value on for loops below, with the page number, so that when scrolling
+    // it will get a number in place of a string (the page url): that should mean that pages to be retrieved,
+    // those between ellipsis on the pagination menu, reached the end
+    w3vv_Pages_Aryxfl[0] = 'w3';
+
+    // I am sure i over complicated things here. And also above!
+    // Can you make it smarter?
+
+    var isPrevEllips = 0;
+    var isPrevEllipses0 = 0;
+    var isNextEllipses0 = 0;
+    var isPrevEllipses = 0;
+    var isNextEllipses = 0;
+    var oncepe = 0;
+    var onceper = 0;
+    var countellips = 0;
+
+    for (el of w3vv_allPages) {
+      if( el.className == 'ellipsis' )
+       {
+        countellips++;
+      }
+    }
+
+  // This loop, get the PageNum BEFORE the ellipsis and the PageNum AFTER the ellipsis
+  // It is used to fill all the empty array keys on the subsequen loop, so to maintain the pages order on keys
+
+   for (el of w3vv_allPages) {
+
+      if( countellips > 1 && onceper == 1 ){
+        isNextEllipses0=el.innerText;
+        onceper=2;
+       }
+
+      if( el.className == 'ellipsis' )
+       {
+        if( countellips > 1 && oncepe == 3 ){
+           isPrevEllipses0 = w3vv_Pages_Aryxfl[isPrevEllips];
+            onceper=1;
+        }
+
+        isPrevEllipses = w3vv_Pages_Aryxfl[isPrevEllips];
+        oncepe=1;
+       }
+
+       w3vv_Pages_Aryxfl[el.innerText] = el.innerText;
+       isPrevEllips = el.innerText;
+       if( oncepe == 2 )
+       { isNextEllipses = el.innerText; }
+
+       oncepe++;
+   }
+
+    // Add/push lacking keys into the w3vv_allPages ary
+
+    var isPrevVal = 0;
+    var isElli = 0;
+    for (el of w3vv_allPages) {
+    // !! classes NEED to MATCH on pagination li .elements
+     if( el.className != 'dropdown-container' && el.className != 'arrow previous' && el.className != 'arrow next' )
+     {
+
+       if( el.className == 'ellipsis' )
+       {
+
+        if(countellips < 2)
+        {
+         for(let i=parseInt(isPrevEllipses)+1;i< parseInt(isNextEllipses);i++){
+          w3vv_pagesUrlAry[i] = i;
+         }
+        } else
+          {
+            if(isElli == 0){ // first ellipsis: add in between lacking keys
+             for(let i=parseInt(isPrevEllipses0)+1;i< parseInt(isNextEllipses0);i++){
+              w3vv_pagesUrlAry[i] = i;
+             }
+             isElli = 1;
+            }
+
+            if(isElli == 1){ // second ellipsis: add in between lacking keys
+             for(let i=parseInt(isPrevEllipses);i< parseInt(isNextEllipses);i++){
+              w3vv_pagesUrlAry[i] = i;
+             }
+             isElli = 2;
+            }
+
+          }
+
+       } // END if( el.className == 'ellipsis' )
+
+
+        if(el.className == 'active'){
+         w3vv_pagesUrlAry[el.innerText] = el.baseURI;
+        } else {  w3vv_pagesUrlAry[el.innerText] = el.firstChild.href; }
+     }
+    } // END for
+
+
+  w3vv_pagesUrlAry = w3vv_pagesUrlAry.filter(n => n); // remove empty keys
+    // So to have
+    // w3vv_pagesUrlAry[1] PAGE 1 url, w3vv_pagesUrlAry[2] PAGE 2 url ... ect
+
+  //console.log('w3vv_pagesUrlAry -> '+w3vv_pagesUrlAry);
+
+  // *!! NEED to MATCH on DOM
+  // Without w3vv_pagesUrlAry keys/pages, if no other method provided, the code as is cannot go on
+  // The resulting w3vv_pagesUrlAry array need to contain all pages URL/NumPage pairs
+  // Array Keys need to match the Page Number
+
+// prepApp -> 'prepend' or 'append'
+function w3vv_getPosts_pushT(prepApp, pageUrl, postID)
+ {
+
+   var XHR = new XMLHttpRequest();
+   var urlEncodedData = "";
+   var urlEncodedDataPairs = [];
+
+   urlEncodedDataPairs.push(encodeURIComponent("w3vvVTLoadTopic") + "=1");
+
+   XHR.addEventListener("error", function(event) {
+    alert("Error: " + event);
+   });
+   XHR.addEventListener("timeout", function(event) {
+    alert("Error: timeout");
+   });
+   XHR.onreadystatechange = function() {
+    if (XHR.readyState === 0 || XHR.readyState === 1) {
+     //console.log("XHRstarting");
+    } else if (XHR.readyState === 3) {
+      //console.log("XHRwaiting");
+    } else if (XHR.readyState === 4) { // onload
+
+      let Str = XHR.response;
+      // This is the main trick! :) ...only We are cool :)
+      let c0 = Str.split('<body id="w3all_phpBB-vv_2-0-2-3_vscroll">')// split the body (with an unique id value: we assume that this sequence never will appear on topic's text!)
+      // ... And yes, to make it really impossible to happen: it's possible just adding few lines of code (i think +- 15) into the listener php
+    
+      const res = c0[1].slice(0,-15); // remove last chars from the result, so to get only a cleaned posts divs list
+
+    // -> Append to the last post id
+     if( prepApp == 'append' ){
+      //alert('Appending page '+ pageUrl);
+      var wh = document.getElementById(postID);
+      wh.insertAdjacentHTML("afterend", res.trim());
+      oneiter=0;
+     }
+
+    // -> Prepend to the first post id
+     if( prepApp == 'prepend' ){
+      //alert('prepending page '+ pageUrl);
+      var wh = document.getElementById(postID);
+      wh.insertAdjacentHTML("beforebegin", res.trim());
+      // Cause an insertion of two pages (if there are previous)
+      // because the smooth scroll effect let see the last inserted postID 
+      //document.getElementById(postID).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+      document.getElementById(postID).scrollIntoView();
+      oneiter=0;
+     }
+
+      }
+   }
+
+   XHR.open("POST", pageUrl);
+   XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+   XHR.send(urlEncodedDataPairs);
+
+ } // END w3vv_getPosts_push
+
+  // !! NEED to MATCH on DOM
+  function w3vv_setActiveLI_P(pnum,w3vv_startPage){
+      if( w3vv_startPage == pnum ){
+      } else {
+         //let r = document.getElementsByClassName('w3vvPP'+pnum);
+          $('.w3vvPP'+pnum+' > a').css({ 'color': '#e3005d' }); // ops, the unique jQuery line
+        }
+  }
+
+// check if element is visible when scrolling
+// May there is something better than this following function
+
+  function w3vv_isScrolledIntoView(el) {
+     var rect = el.getBoundingClientRect();
+     var elemTop = rect.top;
+     var elemBottom = rect.bottom;
+    // Only completely visible elements return true:
+     // ... but with throttler or even without, sometime will fail
+     //var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    // Partially visible elements return true, in this way:
+     var isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+    return isVisible;
+  } // END // w3vv_isScrolledIntoView()
+
+
+  // The Listener vars
+
+
+      var pageprev = parseInt(w3vv_startPage) - 1;
+      var pagenext = parseInt(w3vv_startPage);
+      var oneiter = 0;
+      var stopall = 0;
+
+      var elemPidFL = document.querySelectorAll("#page-body > .post");
+      var lst = elemPidFL.length-1;
+
+      var elemPidFirst = document.getElementById(elemPidFL[0].id);
+      var elemPidLast  = document.getElementById(elemPidFL[lst].id);
+      var firstPostId = elemPidFL[0].id;
+      var lastPostId = elemPidFL[lst].id;
+      
+    // Before to add the listener, if the loaded page is not the first (num 1)
+    // directly append the previous page
+    
+     if( w3vv_startPage > 1 && isNaN(w3vv_pagesUrlAry[pageprev]) && pageprev > 0 && typeof w3vv_loadedPages_Ary[pageprev] === 'undefined' && typeof w3vv_pagesUrlAry[pageprev] != 'undefined' ){
+       w3vv_setActiveLI_P(pageprev,w3vv_startPage);
+       w3vv_getPosts_pushT('prepend', w3vv_pagesUrlAry[pageprev], firstPostId);
+       w3vv_loadedPages_Ary[pageprev] = pageprev;
+         pageprev--;
+       oneiter = 1;
+      }    
+    
+  // The Listener      
+
+    window.addEventListener("scroll", (event) => {  // without throttler (change flow: require to remove line -> function w3vvScrollEvCode(){ and related closing }, in favor of }); more below  )
+    // window.addEventListener("scroll", w3vvScrollThrottler, false); // throttler
+
+   /*  var w3vvScrollTimeout;
+     function w3vvScrollThrottler() {
+       if ( !w3vvScrollTimeout ) {
+         w3vvScrollTimeout = setTimeout(function() {
+           w3vvScrollTimeout = null;
+           w3vvScrollHandler();
+          }, 300); // execution rate
+       }
+     }
+   // handle scroller at given rate
+    function w3vvScrollHandler() {
+     w3vvScrollEvCode();
+    }*/
+
+
+//function w3vvScrollEvCode(){ // remove this line, and the closing } , to remove the throttler
+
+      elemPidFL = document.querySelectorAll("#page-body > .post");
+      lst = elemPidFL.length-1;
+
+      elemPidFirst = document.getElementById(elemPidFL[0].id);
+      elemPidLast  = document.getElementById(elemPidFL[lst].id);
+
+      firstPostId = elemPidFL[0].id;
+      lastPostId = elemPidFL[lst].id;
+
+   if (!w3vv_ticking){
+
+     window.requestAnimationFrame(() => {
+     	
+   
+
+          if(w3vv_isScrolledIntoView(elemPidFirst)){
+
+          // Since the w3vv_pagesUrlAry, if lack keys, has been filled with
+          // pages numbers as values, and not links, is possible to see
+          // when/if it is in between ellipsis, just looking for the w3vv_pagesUrlAry[pageprev] value
+          // If it is a number, and not a string (the passed url), do not follow
+         
+         //console.log(w3vv_loadedPages_Ary);
+
+           if( isNaN(w3vv_pagesUrlAry[pageprev]) && oneiter == 0 && pageprev > 0 && typeof w3vv_loadedPages_Ary[pageprev] === 'undefined' && typeof w3vv_pagesUrlAry[pageprev] != 'undefined' ){
+             w3vv_setActiveLI_P(pageprev,w3vv_startPage);
+             w3vv_getPosts_pushT('prepend', w3vv_pagesUrlAry[pageprev], firstPostId);
+             w3vv_loadedPages_Ary[pageprev] = pageprev;
+             pageprev--;
+             oneiter = 1;
+            }
+          }
+
+          if(w3vv_isScrolledIntoView(elemPidLast)){
+
+            if( stopall==0 && isNaN(w3vv_pagesUrlAry[pagenext]) === false ){
+              stopall=1;
+            }
+
+            if( stopall == 0 && isNaN(w3vv_pagesUrlAry[pagenext]) && oneiter == 0 && typeof w3vv_loadedPages_Ary[pagenext] === 'undefined' && typeof w3vv_pagesUrlAry[pagenext] != 'undefined' ){
+
+             w3vv_getPosts_pushT('append', w3vv_pagesUrlAry[pagenext], lastPostId);
+             w3vv_loadedPages_Ary[pagenext] = pagenext;
+             pagenext++;
+             oneiter = 1;
+             w3vv_setActiveLI_P(pagenext,w3vv_startPage);
+            }
+          }
+
+
+       w3vv_ticking = false;
+
+     }); // END window.requestAnimationFrame(() => {
+   }
+    w3vv_ticking = true;
+
+   }); // END document.addEventListener("scroll" // without throttler
+  //} // END w3vvScrollEvCode(){ function x throttler
+
+
+ } // END //  if ( document.querySelector(".bar-top > .pagination > ul > li > span") != null )
+
+</script>
+<!-- ENDIF -->

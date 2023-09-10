@@ -1,0 +1,11 @@
+services:
+    w3all.w3vv.listener:
+        class: w3all\w3vv\event\main_listener
+        arguments:
+            - '@language'
+            - '@config'
+            - '@template'
+            - '@request'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }
