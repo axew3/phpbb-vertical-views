@@ -3,6 +3,9 @@
 
 Under construction!
 
+[Donate](https://www.paypal.com/paypalme/alessionanni/ "Help axew3!")
+
+
 Test release: tested on phpBB prosilver 3.3
 
 # Note: This is not an option.
