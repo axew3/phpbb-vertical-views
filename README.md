@@ -16,7 +16,7 @@ The author site, axew3.com, or this github repo. Into your main features templat
 I maybe also expect that you'll help on improve this for all, while also for your personal use.
 
 
-You have to mention: The author site, axew3.com, or this github repo,
+Remember: the author site, axew3.com, or this github repo,
 into your main template features explain, if you'll use this idea.
 
 
