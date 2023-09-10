@@ -6,8 +6,8 @@ Under construction!
 Test release: tested on phpBB prosilver 3.3
 
 # Note: This is not an option.
-## You have to mention that you used this idea if you'll use it.
-## Into your main features template explain.
+### You have to mention that you used this idea if you'll use it.
+### Into your main features template explain.
 The author site, or the github repo. Into your main features template explain.
 
 
