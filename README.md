@@ -10,7 +10,7 @@ Test release: tested on phpBB prosilver 3.3
 ### Into your main features template explain.
 The author site, axew3.com, or this github repo. Into your main features template explain.
 
-
+See this post for install instructions (that soon will change) if you need it
 [Ask on topic at phpBB.com](https://www.phpbb.com/community/viewtopic.php?p=15973420#p15973420 "phpBB.com help topic")
 
 I maybe also expect that you'll help on improve this for all, while also for your personal use.
