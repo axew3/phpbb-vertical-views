@@ -15,7 +15,7 @@ See this post for install instructions (that soon will change) if you need it
 
 I maybe also expect that you'll help on improve this for all, while also for your personal use.
 
-Please consider to help me:
+Please consider to:
 [Donate](https://www.paypal.com/paypalme/alessionanni/ "Help axew3!")
 
 
