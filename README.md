@@ -1,7 +1,8 @@
 # phpbb-vertical-views
 ### Vertical Views for phpBB viewtopic and viewforum
 
-Under construction!
+### If you want an improved version, that will be updated and further more imporved along the time, follow here:
+## [w3all_vv](https://www.axew3.com/w3/forums/viewtopic.php?t=1804) "phpBB w3all extension")
 
 Test release: tested on phpBB prosilver 3.3
 
@@ -15,11 +16,8 @@ See this post for install instructions (that soon will change) if you need it
 
 I maybe also expect that you'll help on improve this for all, while also for your personal use.
 
-Please consider to:
-[Donate](https://www.paypal.com/paypalme/alessionanni/ "Help axew3!")
-
-
 Remember: the author site, axew3.com, or this github repo,
 into your main template features explain, if you'll use this idea.
 
-
+### If you want an improved version, that will be updated and further more imporved along the time, follow here:
+## [w3all_vv](https://www.axew3.com/w3/forums/viewtopic.php?t=1804) "phpBB w3all extension")
